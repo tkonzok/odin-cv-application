@@ -1,8 +1,14 @@
 import { useState } from "react";
 import "./App.css";
+import Icon from "@mdi/react";
+import { mdiPen, mdiTrashCan, mdiPlusCircle } from "@mdi/js";
 
 function DescriptionRow({ description }) {
-  return <li key={description}>{description}</li>;
+  return (
+    <li className="list-style" key={description}>
+      {description}
+    </li>
+  );
 }
 
 function TitleRow({
@@ -13,6 +19,7 @@ function TitleRow({
   end,
   editEducation,
   deleteEducation,
+  preview,
 }) {
   function handleEdit() {
     editEducation(id);
@@ -49,18 +56,26 @@ function TitleRow({
 
   return (
     <>
-      <button onClick={handleEdit}>Edit</button>
-      <button onClick={handleDelete}>Delete</button>
       <h3>
         {title} // {institute} // {startDate}
         {" - "}
         {endDate}
       </h3>
+      {!preview && (
+        <div className="icons">
+          <button className="editBtn" onClick={handleEdit}>
+            <Icon path={mdiPen} size={1} />
+          </button>
+          <button className="deleteBtn" onClick={handleDelete}>
+            <Icon path={mdiTrashCan} size={1} />
+          </button>
+        </div>
+      )}
     </>
   );
 }
 
-function EducationRow({ education, editEducation, deleteEducation }) {
+function EducationRow({ education, editEducation, deleteEducation, preview }) {
   return (
     <li key={education}>
       <TitleRow
@@ -71,15 +86,23 @@ function EducationRow({ education, editEducation, deleteEducation }) {
         end={education.end}
         editEducation={editEducation}
         deleteEducation={deleteEducation}
+        preview={preview}
       />
       <ul>
-        <DescriptionRow description={education.description} />
+        {education.description && (
+          <DescriptionRow description={education.description} />
+        )}
       </ul>
     </li>
   );
 }
 
-function EducationListings({ educations, editEducation, deleteEducation }) {
+function EducationListings({
+  educations,
+  editEducation,
+  deleteEducation,
+  preview,
+}) {
   let rows = [];
   educations.forEach((education) => {
     rows.push(
@@ -87,6 +110,7 @@ function EducationListings({ educations, editEducation, deleteEducation }) {
         education={education}
         editEducation={editEducation}
         deleteEducation={deleteEducation}
+        preview={preview}
       />
     );
   });
@@ -147,7 +171,7 @@ function AddEducation(props) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="title">Degree: </label>
           <input
@@ -212,8 +236,8 @@ function AddEducation(props) {
           </button>
         </div>
       </form>
-      <ul>
-        <EducationRow education={newEducation} />
+      <ul className="preview">
+        <EducationRow education={newEducation} preview={true} />
       </ul>
     </div>
   );
@@ -297,7 +321,7 @@ function EditEducation(props) {
   }
 
   return (
-    <div>
+    <div className="form">
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="title">Education Title: </label>
@@ -350,16 +374,21 @@ function EditEducation(props) {
           />
         </div>
         <div>
-          <button type="button" id="cancel" onClick={handleCancel}>
+          <button
+            className="btn"
+            type="button"
+            id="cancel"
+            onClick={handleCancel}
+          >
             Cancel
           </button>
-          <button type="submit" id="submit">
-            Apply Changes
+          <button className="btn" type="submit" id="submit">
+            Apply
           </button>
         </div>
       </form>
-      <ul>
-        <EducationRow education={editedEducation} />
+      <ul className="preview">
+        <EducationRow education={editedEducation} preview={true} />
       </ul>
     </div>
   );
@@ -373,7 +402,7 @@ function Education() {
       institute: "Hamburg University of Applied Sciences",
       start: new Date("2012-09"),
       end: new Date("2016-07"),
-      description: "Final grade: 1.3",
+      description: "Final grade: 1.28",
     },
     {
       id: 1,
@@ -433,7 +462,11 @@ function Education() {
     <>
       <div className="section">
         <h2>Education</h2>
-        {!formActive && <button onClick={toggleForm}>Add Entry</button>}
+        {!formActive && (
+          <button className="addBtn" onClick={toggleForm}>
+            <Icon path={mdiPlusCircle} size={1} />
+          </button>
+        )}
         {formActive && edit < 0 && (
           <AddEducation id={id} onSubmit={getData} formActive={toggleForm} />
         )}

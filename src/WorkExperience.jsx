@@ -1,11 +1,26 @@
 import { useState } from "react";
 import "./App.css";
+import Icon from "@mdi/react";
+import { mdiPen, mdiTrashCan, mdiPlusCircle } from "@mdi/js";
 
 function TaskRow({ task }) {
-  return <li key={task}>{task}</li>;
+  return (
+    <li className="list-style" key={task}>
+      {task}
+    </li>
+  );
 }
 
-function TitleRow({ id, title, company, start, end, editJob, deleteJob }) {
+function TitleRow({
+  id,
+  title,
+  company,
+  start,
+  end,
+  editJob,
+  deleteJob,
+  preview,
+}) {
   function handleEdit() {
     editJob(id);
   }
@@ -41,18 +56,26 @@ function TitleRow({ id, title, company, start, end, editJob, deleteJob }) {
 
   return (
     <>
-      <button onClick={handleEdit}>Edit</button>
-      <button onClick={handleDelete}>Delete</button>
       <h3>
         {title} // {company} // {startDate}
         {" - "}
         {endDate}
       </h3>
+      {!preview && (
+        <div className="icons">
+          <button className="editBtn" onClick={handleEdit}>
+            <Icon path={mdiPen} size={1} />
+          </button>
+          <button className="deleteBtn" onClick={handleDelete}>
+            <Icon path={mdiTrashCan} size={1} />
+          </button>
+        </div>
+      )}
     </>
   );
 }
 
-function JobRow({ job, editJob, deleteJob }) {
+function JobRow({ job, editJob, deleteJob, preview }) {
   let tasks = [];
   if (job.task1) {
     tasks.push(<TaskRow task={job.task1} />);
@@ -73,6 +96,7 @@ function JobRow({ job, editJob, deleteJob }) {
         end={job.end}
         editJob={editJob}
         deleteJob={deleteJob}
+        preview={preview}
       />
       <ul>{tasks}</ul>
     </li>
@@ -143,7 +167,7 @@ function AddJob(props) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="title">Job Title: </label>
           <input
@@ -200,7 +224,7 @@ function AddJob(props) {
           />
         </div>
         <div>
-          <label htmlFor="task2">Further Tasks (optional): </label>
+          <label htmlFor="task2">Further Tasks: </label>
           <input
             type="text"
             name="task2"
@@ -211,7 +235,7 @@ function AddJob(props) {
           />
         </div>
         <div>
-          <label htmlFor="task3">Further Tasks (optional): </label>
+          <label htmlFor="task3">Further Tasks: </label>
           <input
             type="text"
             name="task3"
@@ -230,8 +254,8 @@ function AddJob(props) {
           </button>
         </div>
       </form>
-      <ul>
-        <JobRow job={newJob} />
+      <ul className="preview">
+        <JobRow job={newJob} preview={true} />
       </ul>
     </div>
   );
@@ -310,7 +334,7 @@ function EditJob(props) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="title">Job Title: </label>
           <input
@@ -362,7 +386,7 @@ function EditJob(props) {
           />
         </div>
         <div>
-          <label htmlFor="task2">Further Tasks (optional): </label>
+          <label htmlFor="task2">Further Tasks: </label>
           <input
             type="text"
             name="task2"
@@ -372,7 +396,7 @@ function EditJob(props) {
           />
         </div>
         <div>
-          <label htmlFor="task3">Further Tasks (optional): </label>
+          <label htmlFor="task3">Further Tasks: </label>
           <input
             type="text"
             name="task3"
@@ -382,16 +406,21 @@ function EditJob(props) {
           />
         </div>
         <div>
-          <button type="button" id="cancel" onClick={handleCancel}>
+          <button
+            className="btn"
+            type="button"
+            id="cancel"
+            onClick={handleCancel}
+          >
             Cancel
           </button>
-          <button type="submit" id="submit">
-            Apply Changes
+          <button className="btn" type="submit" id="submit">
+            Apply
           </button>
         </div>
       </form>
-      <ul>
-        <JobRow job={editedJob} />
+      <ul className="preview">
+        <JobRow job={editedJob} preview={true} />
       </ul>
     </div>
   );
@@ -464,7 +493,11 @@ function WorkExperience() {
     <>
       <div className="section">
         <h2>Work Experience</h2>
-        {!formActive && <button onClick={toggleForm}>Add Entry</button>}
+        {!formActive && (
+          <button className="addBtn" onClick={toggleForm}>
+            <Icon path={mdiPlusCircle} size={1} />
+          </button>
+        )}
         {formActive && edit < 0 && (
           <AddJob id={id} onSubmit={getData} formActive={toggleForm} />
         )}

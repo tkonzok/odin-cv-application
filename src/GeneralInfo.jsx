@@ -1,5 +1,7 @@
 import { useState } from "react";
 import "./App.css";
+import Icon from "@mdi/react";
+import { mdiPen, mdiPlusCircle } from "@mdi/js";
 
 function BulletpointRow({ bulletpoint }) {
   return <p>{bulletpoint}</p>;
@@ -16,8 +18,12 @@ function FullNameRow({ id, fullname, editInfo, deleteInfo }) {
 
   return (
     <>
-      {fullname !== "" && <button onClick={handleEdit}>Edit</button>}
       <h1>{fullname}</h1>
+      {fullname !== "" && (
+        <button className="editBtn" onClick={handleEdit}>
+          <Icon path={mdiPen} size={1} />
+        </button>
+      )}
     </>
   );
 }
@@ -36,7 +42,7 @@ function InfoRow({ info, editInfo }) {
   return (
     <>
       <FullNameRow id={info.id} fullname={info.fullname} editInfo={editInfo} />
-      {bulletpoints}
+      <div className="bulletpoints">{bulletpoints}</div>
     </>
   );
 }
@@ -67,7 +73,7 @@ function AddInfo(props) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="fullname">Full Name: </label>
           <input
@@ -121,9 +127,9 @@ function AddInfo(props) {
           </button>
         </div>
       </form>
-      <ul>
+      <div className="preview">
         <InfoRow info={newInfo} />
-      </ul>
+      </div>
     </div>
   );
 }
@@ -156,7 +162,7 @@ function EditInfo(props) {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <div>
           <label htmlFor="fullname">Full Name: </label>
           <input
@@ -202,13 +208,13 @@ function EditInfo(props) {
             Cancel
           </button>
           <button type="submit" id="submit">
-            Apply Changes
+            Apply
           </button>
         </div>
       </form>
-      <ul>
+      <div>
         <InfoRow info={editedInfo} />
-      </ul>
+      </div>
     </div>
   );
 }
@@ -252,7 +258,9 @@ function GeneralInfo() {
     <>
       <div className="section">
         {info.fullname === "" && !formActive && (
-          <button onClick={toggleForm}>Add Infos</button>
+          <button className="addBtn" onClick={toggleForm}>
+            <Icon path={mdiPlusCircle} size={1} />
+          </button>
         )}
         {formActive && edit < 0 && (
           <AddInfo onSubmit={getData} formActive={toggleForm} />

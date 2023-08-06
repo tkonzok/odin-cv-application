@@ -5,38 +5,112 @@
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.form,
+.preview {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background-color: #383838;
+  margin: 0 auto;
+  box-shadow: #0000003d 0px 3px 8px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.form {
+  min-width: 480px;
+  max-width: 75%;
+  margin-bottom: 1rem;
+}
+
+form div {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+}
+
+form div:last-child {
+  display: grid;
+  grid-template-columns: 100px 100px;
+  justify-content: end;
+}
+
+form div * {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  margin: 0.5rem;
+}
+
+input {
+  box-shadow: #0000003d 0px 1px 3px;
+}
+
+input,
+textarea {
+  background-color: rgb(66, 66, 66);
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+form button {
+  padding: 0.3rem 0.5rem;
+  transition: background-color 0.25s;
+}
+
+form button:hover {
+  background-color: #af3ce9;
+}
+
+.bulletpoints {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.icons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.addBtn,
+.editBtn,
+.deleteBtn {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  font-family: inherit;
+  background-color: transparent;
+  cursor: pointer;
+  transition: color 0.25s;
+}
+
+.addBtn:hover,
+.editBtn:hover,
+.deleteBtn:hover {
+  color: #af3ce9;
+}
+
+.addBtn:focus,
+.addBtn:focus-visible,
+.editBtn:focus,
+.deleteBtn:focus,
+.editBtn:focus-visible,
+.deleteBtn:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  .form,
+  .preview {
+    border: 1px solid transparent;
+    background-color: #fafafa;
   }
-  to {
-    transform: rotate(360deg);
+
+  input,
+  textarea {
+    background-color: #f1f1f1;
   }
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+  input::placeholder {
+    color: #000000;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
 }
