@@ -111,6 +111,6 @@ form button:hover {
   }
 
   input::placeholder {
-    color: #000000;
+    color: #666666;
   }
 }

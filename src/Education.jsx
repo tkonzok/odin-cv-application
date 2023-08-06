@@ -441,7 +441,12 @@ function Education() {
     if (cancelled) {
       setEducations([...educations].sort((a, b) => b.end - a.end));
     } else {
-      setEducations([data, ...educations].sort((a, b) => b.end - a.end));
+      setEducations(
+        [
+          data,
+          ...educations.filter((education) => education.id !== data.id),
+        ].sort((a, b) => b.end - a.end)
+      );
     }
     setFormActive((state) => !state);
     setEdit(-1);

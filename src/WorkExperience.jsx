@@ -474,7 +474,11 @@ function WorkExperience() {
     if (cancelled) {
       setJobs([...jobs].sort((a, b) => b.end - a.end));
     } else {
-      setJobs([data, ...jobs].sort((a, b) => b.end - a.end));
+      setJobs(
+        [data, ...jobs.filter((job) => job.id !== data.id)].sort(
+          (a, b) => b.end - a.end
+        )
+      );
     }
     setFormActive((state) => !state);
     setEdit(-1);

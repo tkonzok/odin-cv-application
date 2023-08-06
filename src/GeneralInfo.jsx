@@ -1,34 +1,39 @@
 import { useState } from "react";
 import "./App.css";
 import Icon from "@mdi/react";
-import { mdiPen, mdiPlusCircle } from "@mdi/js";
+import { mdiPen, mdiTrashCan, mdiPlusCircle } from "@mdi/js";
 
 function BulletpointRow({ bulletpoint }) {
   return <p>{bulletpoint}</p>;
 }
 
-function FullNameRow({ id, fullname, editInfo, deleteInfo }) {
+function FullNameRow({ fullname, editInfo, deleteInfo }) {
   function handleEdit() {
-    editInfo(id);
+    editInfo();
   }
 
   function handleDelete() {
-    deleteInfo(id);
+    deleteInfo();
   }
 
   return (
     <>
       <h1>{fullname}</h1>
       {fullname !== "" && (
-        <button className="editBtn" onClick={handleEdit}>
-          <Icon path={mdiPen} size={1} />
-        </button>
+        <div className="icons">
+          <button className="editBtn" onClick={handleEdit}>
+            <Icon path={mdiPen} size={1} />
+          </button>
+          <button className="deleteBtn" onClick={handleDelete}>
+            <Icon path={mdiTrashCan} size={1} />
+          </button>
+        </div>
       )}
     </>
   );
 }
 
-function InfoRow({ info, editInfo }) {
+function InfoRow({ info, editInfo, deleteInfo }) {
   let bulletpoints = [];
   if (info.email) {
     bulletpoints.push(<BulletpointRow bulletpoint={info.email} />);
@@ -41,7 +46,11 @@ function InfoRow({ info, editInfo }) {
   }
   return (
     <>
-      <FullNameRow id={info.id} fullname={info.fullname} editInfo={editInfo} />
+      <FullNameRow
+        fullname={info.fullname}
+        editInfo={editInfo}
+        deleteInfo={deleteInfo}
+      />
       <div className="bulletpoints">{bulletpoints}</div>
     </>
   );
@@ -157,7 +166,7 @@ function EditInfo(props) {
   }
 
   function handleCancel() {
-    props.onSubmit(props.info, true);
+    props.onSubmit(props.info);
   }
 
   return (
@@ -239,12 +248,8 @@ function GeneralInfo() {
     setFormActive((state) => !state);
   };
 
-  const getEditData = (data, cancelled = false) => {
-    if (cancelled) {
-      setInfo(...info);
-    } else {
-      setInfo(data);
-    }
+  const getEditData = (data) => {
+    setInfo(data);
     setFormActive((state) => !state);
     setEdit(-1);
   };
@@ -252,6 +257,15 @@ function GeneralInfo() {
   const editInfo = () => {
     setFormActive(true);
     setEdit(1);
+  };
+
+  const deleteInfo = () => {
+    setInfo({
+      fullname: "",
+      email: "",
+      phone: "",
+      location: "",
+    });
   };
 
   return (
@@ -272,7 +286,9 @@ function GeneralInfo() {
             formActive={toggleForm}
           />
         )}
-        {!formActive && <InfoRow info={info} editInfo={editInfo} />}
+        {!formActive && (
+          <InfoRow info={info} editInfo={editInfo} deleteInfo={deleteInfo} />
+        )}
       </div>
     </>
   );
